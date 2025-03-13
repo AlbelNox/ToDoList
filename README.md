@@ -1,7 +1,14 @@
 # Projekt
-Das Projekt ist ein Verwaltungssystem für ToDo Listen.
-Es gibt eine Hauptliste in der Alle ToDo Listen stehen. In jeder diese Listen können dann noch Einträge erstellt werden, die sogenannten ToDos.
-Es können Listen erstellt, gelöscht werden. Bestehende Listen erweitert werden mit ToDos und ToDos können geändert werden.
+Das Projekt ist ein Verwaltungssystem für ToDo-Listen. Es gibt eine Hauptliste, in der alle ToDo-Listen stehen. In jeder dieser Listen können dann noch Einträge erstellt werden, die sogenannten ToDos. Es können Listen erstellt und gelöscht werden. Bestehende Listen können mit ToDos erweitert und ToDos können geändert werden.
+
+# Verwendete Biblotheken
+- uuid (Standard)
+
+# Verwendete Web-Framework-Bibliothek
+- flask 
+
+# Installation Biblitheken
+pip install flask
 
 # Endpunkte
 Methode     Pfad (<Parameter>)                          Funktion
@@ -15,4 +22,4 @@ PUT	        /todo-list/<list_id>/entry/<entry_id>	    Eintrag aktualisieren
 DELETE	    /todo-list/<list_id>/entry/<entry_id>	    Eintrag löschen
 
 # LICENCE
-Dieses Projekt steht under der MIT-Lizenz. Siehe die LICENCE Datei für mehr Informationen
+Dieses Projekt steht under der MIT-Lizenz. Siehe die LICENCE Datei für mehr Informationen.

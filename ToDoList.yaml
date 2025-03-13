@@ -1,0 +1,286 @@
+openapi: 3.0.1
+info:
+  title: Todo-Listen-Verwaltung
+  version: 1.0.0
+  contact:
+    email: mikel.thiele@hellmann.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: http://127.0.0.1:5000/
+tags:
+- name: Listenverwaltung
+paths:
+  /todo-lists:
+    get:
+      tags:
+      - Listenverwaltung
+      summary: Get all todo lists
+      operationId: getAllTodoLists
+      responses:
+        200:
+          description: List of all todo lists
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TodoList'
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /todo-list/{list_id}/entries:
+    get:
+      tags:
+      - Listenverwaltung
+      summary: Get all items from list
+      operationId: getTodoListEntries
+      parameters:
+      - $ref: '#/components/parameters/ListIdParam'
+      responses:
+        200:
+          description: List of all items in list_id returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TodoEntry'
+        404:
+          description: Invalid list id
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /todo-list/{list_id}:
+    get:
+      tags:
+      - Listenverwaltung
+      summary: Get a specific todo list
+      operationId: getTodoList
+      parameters:
+      - $ref: '#/components/parameters/ListIdParam'
+      responses:
+        200:
+          description: List details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoList'
+        404:
+          description: Invalid list id
+        405:
+          description: Wrong Method
+        500:
+          description: Server error
+    delete:
+      tags:
+      - Listenverwaltung
+      summary: Delete a todo list
+      operationId: deleteTodoList
+      parameters:
+      - $ref: '#/components/parameters/ListIdParam'
+      responses:
+        200:
+          description: List was deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: success
+        404:
+          description: Invalid list id
+        405:
+          description: Wrong Method
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Server error
+  /todo-list:
+    post:
+      tags:
+      - Listenverwaltung
+      summary: Create a new todo list
+      operationId: createTodoList
+      requestBody:
+        description: List details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoListPOST'
+      responses:
+        200:
+          description: List created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoList'
+        400:
+          description: Invalid request
+        405:
+          description: Wrong Method
+        500:
+          description: Server error
+
+  /todo-list/{list_id}/entry:
+    post:
+      tags:
+      - Listenverwaltung
+      summary: Add an entry to a todo list
+      operationId: addTodoEntry
+      parameters:
+      - $ref: '#/components/parameters/ListIdParam'
+      requestBody:
+        description: Entry details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoEntryPOST'
+      responses:
+        200:
+          description: Entry added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoEntry'
+        400:
+          description: Bad Request
+        404:
+          description: Invalid list id
+        405:
+          description: Wrong Method
+        500:
+          description: Server error
+  /todo-list/{list_id}/entry/{entry_id}:
+    put:
+      tags:
+      - Listenverwaltung
+      summary: Update an entry in a todo list
+      operationId: updateTodoEntry
+      parameters:
+      - $ref: '#/components/parameters/ListIdParam'
+      - $ref: '#/components/parameters/EntryIdParam'
+      requestBody:
+        description: Entry details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TodoEntryPOST'
+      responses:
+        200:
+          description: Entry updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TodoEntry'
+        404:
+          description: Invalid entry id
+        405:
+          description: Wrong Method
+        500:
+          description: Server error
+    delete:
+      tags:
+      - Listenverwaltung
+      summary: Delete an entry from a todo list
+      operationId: deleteTodoEntry
+      parameters:
+      - $ref: '#/components/parameters/ListIdParam'
+      - $ref: '#/components/parameters/EntryIdParam'
+      responses:
+        200:
+          description: Entry deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    type: string
+                    example: success
+        404:
+          description: Invalid entry id
+        405:
+          description: Wrong Method
+        500:
+          description: Server error
+components:
+  schemas:
+    TodoEntry:
+      type: object
+      properties:
+        description:
+          type: string
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    TodoEntryPOST:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    TodoList:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    TodoListPOST:
+      type: object
+      properties:
+        name:
+          type: string
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+  parameters:
+    ListIdParam:
+      name: list_id
+      in: path
+      description: list id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    EntryIdParam:
+      name: entry_id
+      in: path
+      description: entry id
+      required: true
+      schema:
+        type: string
+        format: uuid

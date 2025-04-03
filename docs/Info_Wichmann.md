@@ -1,3 +1,4 @@
+# Generelle Informationen
 Hallo Herr Wichmann,
 
 leider musste ich feststellen, dass Git probleme mit der Auswahl des commitenden Accounts hat, sofern mehrere Git Accounts auf einem Gerät angemeldet sind.

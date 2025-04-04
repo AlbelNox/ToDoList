@@ -96,4 +96,4 @@ Requiement Example:
 ```   
   	    
 # LICENCE
-Dieses Projekt steht under der MIT-Lizenz. Siehe die LICENCE Datei für mehr Informationen.
+Dieses Projekt steht under der MIT-Lizenz. Siehe die [LICENCE](https://github.com/AlbelNox/ToDoList/blob/main/LICENSE) Datei für mehr Informationen.

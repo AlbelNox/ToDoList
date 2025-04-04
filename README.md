@@ -17,7 +17,7 @@ This is a REST API Project for managing Todo lists and inherit Tasks. Using uuid
 
 ### 2. Clone Repository:
 ```bash
-https://github.com/AlbelNox/ToDoList.git
+git clone https://github.com/AlbelNox/ToDoList.git
 ```
 
 ### 3. Redirect in projectfolder:

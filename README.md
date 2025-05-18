@@ -55,7 +55,7 @@ Requiement Example:
 { "name": "Example Name" }
 ```
 
-## Get information of speficic list
+## Get information of specific list
 ```html
 /todo-list/<list_id>
 ```
@@ -81,13 +81,13 @@ Requiement Example:
 ```html
 /todo-list/<list_id>/entry/<entry_id>
 ```
-Requiement Example:
+Requirement Example:
 ```json
 {
 "name": "Example Name",
 "description": "Example description"
 }
-```                        
+```
 
 ## Delete entry
 
@@ -96,4 +96,4 @@ Requiement Example:
 ```   
   	    
 # LICENCE
-Dieses Projekt steht under der MIT-Lizenz. Siehe die [LICENCE](https://github.com/AlbelNox/ToDoList/blob/main/LICENSE) Datei für mehr Informationen.
+This project is licensed under the MIT License. See the [LICENCE](https://github.com/AlbelNox/ToDoList/blob/main/LICENSE) for more information.

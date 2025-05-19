@@ -35,6 +35,14 @@ It uses Apache2 as a basic web server and provides step-by-step setup instructio
 2. Check LED at RJ45 port: orange (power), green (network activity).
 
 3. Open Windows PowerShell (`Admin`):
+```markdown
+If copy & paste is not enabled in your powershell:
+- rightclick at the topframe
+- click properties
+- aktivate `USE Ctrl+Shift+C/V as Copy/Paste`
+- click 'OK'
+Now you should be able to paste copy & paste text via rightclicked mouse.
+```
 
 ```bash
 # --> Commands in powershell <--
@@ -99,8 +107,36 @@ you should see `Apache2 Debian Default Page`
 
 2. Run your own html (another test)
 ```bash
-# --> Commandss in powershell <--
-echo '<h1>Hello World!</h1>' | sudo tee /var/www/html/index.html
+# --> Commands in powershell <--
+# HTML with little Design
+sudo tee /var/www/html/index.html > /dev/null <<EOF
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Raspberry Pi Website</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 100px;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        p {
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello World!</h1>
+    <p>This website is published by my Raspberry Pi. Now a great journey begins!</p>
+</body>
+</html>
+EOF
 ```
 
 3. Reload browser - it should show your message.

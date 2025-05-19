@@ -1,6 +1,6 @@
 # Project
-This project sets up a **headless Raspberry Pi webserver**, mainly to host an "<index.html>" file that interacts with another project.  
-It uses Apache2 as a basic web server and provides step-by-step setup instructions from flashing the SD card to network monitoring with "tcpdump".
+This project sets up a **headless Raspberry Pi webserver**, mainly to host an `<index.html>` file that interacts with another project.  
+It uses Apache2 as a basic web server and provides step-by-step setup instructions from flashing the SD card to network monitoring with `tcpdump`.
 
 # Librarys
 - apache2
@@ -18,11 +18,11 @@ It uses Apache2 as a basic web server and provides step-by-step setup instructio
 - Basic TCP traffic monitoring (port 80)
   
 # Setup
-## Setup Guide: Webserver on Raspberry Pi (Headless, from Windows)
+## Setup Guide: Webserver on Raspberry Pi (`Headless, from Windows`)
 ### Flash image & enable SSH
 1. Use [Raspberry Pi Imager](https://www.raspberrypi.com/software/) to flash the SD card (16–128 GB).
 
-2. Enable SSH (under "Advanced options").
+2. Enable SSH (under 'Advanced options').
 
 3. Set: 
  - `Pi_Hostname`
@@ -34,7 +34,7 @@ It uses Apache2 as a basic web server and provides step-by-step setup instructio
 
 2. Check LED at RJ45 port: orange (power), green (network activity).
 
-3. Open Windows PowerShell (Admin):
+3. Open Windows PowerShell (`Admin`):
 
 ```bash
 # check if raspberry is found in network, IPv4 as response
@@ -45,20 +45,22 @@ ping raspberrypi -4
 ssh <Pi_Hostname>@<raspberry Pi IPv4>
 ```
 
-        If you see 'Warning:Remote Host Identification has changed!'
-        ```bash
-        # reset SSH key
-        ssh-keygen -R <raspberry Pi IPv4>
-        
-        # retry to connect via SSH
-        ssh <Pi_Hostname>@<raspberry Pi IPv4>
-        ```
+### 🔴 If you see `"Warning: Remote Host Identification has changed!"`
+
+```bash
+# reset SSH key
+ssh-keygen -R <raspberry Pi IPv4>
+
+# retry to connect via SSH
+ssh <Pi_Hostname>@<raspberry Pi IPv4>
+```
+### 🟢 Else
 
 4. Authenticate:
-- "yes" for authentitytest
+- `yes` for authentitytest
 - enter `Pi_password`
 
-Optional: Run configuration tool (not needed!)
+Optional: Run configuration tool (`not needed!`)
 ```bash
 sudo raspi-config
 ```
@@ -82,8 +84,11 @@ sudo apt upgrade
 
 ### Test apache server
 1. Open in your pc browser:
-><raspberry Pi IPv4>
-you should see "Apache2 Debian Default Page"
+   
+```html
+<raspberry Pi IPv4>
+```
+you should see `Apache2 Debian Default Page`
 
 2. Run your own html (another test)
 ```bash
@@ -102,7 +107,7 @@ sudo apt install tcpdump -y
 # you can change the name, but change it in the following commands too!
 sudo tcpdump -i eth0 port 80 -w webzugriff.pcap
 ```
-2. interact with the server (reload browserpage)
+2. interact with the server (`reload browserpage`)
 
 3. stop recording in powershell via
 > CTRL + C
@@ -111,7 +116,7 @@ sudo tcpdump -i eth0 port 80 -w webzugriff.pcap
 ```bash
 sudo tcpdump -r webzugriff.pcap
 ```
-## Have fun with it
+## Have fun with it 😊
 	    
 # LICENCE
 This project is licensed under the MIT License. See the [LICENCE](https://github.com/AlbelNox/ToDoList/blob/main/LICENSE) for more information.

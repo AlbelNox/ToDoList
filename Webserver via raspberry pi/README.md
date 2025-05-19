@@ -37,6 +37,7 @@ It uses Apache2 as a basic web server and provides step-by-step setup instructio
 3. Open Windows PowerShell (`Admin`):
 
 ```bash
+# --> Commands in powershell <--
 # check if raspberry is found in network, IPv4 as response
 # for easier access make the IPv4 for the raspberry static
 ping raspberrypi -4
@@ -48,6 +49,7 @@ ssh <Pi_Hostname>@<raspberry Pi IPv4>
 ### 🔴 If you see `"Warning: Remote Host Identification has changed!"`
 
 ```bash
+# --> Commands in powershell <--
 # reset SSH key
 ssh-keygen -R <raspberry Pi IPv4>
 
@@ -62,11 +64,14 @@ ssh <Pi_Hostname>@<raspberry Pi IPv4>
 
 Optional: Run configuration tool (`not needed!`)
 ```bash
+# --> Commands in powershell <--
+# Access to config of raspberry pi 
 sudo raspi-config
 ```
 
 ### Installing apache webserver
 ```bash
+# --> Commands in powershell <--
 # check updates for your application
 sudo apt update
 
@@ -78,6 +83,7 @@ sudo systemctl status apache2
 
 Optional:
 ```bash
+# --> Commands in powershell <--
 # upgrading currently installed applications to their latest available version
 sudo apt upgrade
 ```
@@ -86,12 +92,14 @@ sudo apt upgrade
 1. Open in your pc browser:
    
 ```html
+# Browser url
 <raspberry Pi IPv4>
 ```
 you should see `Apache2 Debian Default Page`
 
 2. Run your own html (another test)
 ```bash
+# --> Commandss in powershell <--
 echo '<h1>Hello World!</h1>' | sudo tee /var/www/html/index.html
 ```
 
@@ -100,11 +108,12 @@ echo '<h1>Hello World!</h1>' | sudo tee /var/www/html/index.html
 ### Monitor web traffic
 1. installing & recording
 ```bash
+# --> Commands in powershell <--
 # install tcpdump
 sudo apt install tcpdump -y
 
 # start recording port80 (HTTP) traffic save in file named "webzugriff.pcap"
-# you can change the name, but change it in the following commands too!
+# you can change the name, but change it in the following Commands too!
 sudo tcpdump -i eth0 port 80 -w webzugriff.pcap
 ```
 2. interact with the server (`reload browserpage`)
@@ -114,6 +123,7 @@ sudo tcpdump -i eth0 port 80 -w webzugriff.pcap
 
 4. review the data
 ```bash
+# --> Commands in powershell <--
 sudo tcpdump -r webzugriff.pcap
 ```
 ## Have fun with it 😊

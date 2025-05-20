@@ -34,14 +34,14 @@ It uses Apache2 as a basic web server and provides step-by-step setup instructio
 
 2. Check LED at RJ45 port: orange (power), green (network activity).
 
-3. Open Windows PowerShell (`Admin`):
+3. Open Windows PowerShell (`Admin`) on your windows pc:
 ```markdown
 If copy & paste is not enabled in your powershell:
 - rightclick at the topframe
 - click properties
-- aktivate `USE Ctrl+Shift+C/V as Copy/Paste`
+- activate `USE Ctrl+Shift+C/V as Copy/Paste`
 - click 'OK'
-Now you should be able to paste copy & paste text via rightclicked mouse.
+Now, you should be able to copy & paste text via rightclicked mouse.
 ```
 
 ```bash
@@ -155,6 +155,8 @@ sudo tcpdump -i eth0 port 80 -w webzugriff.pcap
 2. interact with the server (`reload browserpage`)
 
 3. stop recording in powershell via
+>--> Commands in powershell <--
+>
 > CTRL + C
 
 4. review the data

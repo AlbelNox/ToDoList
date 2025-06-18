@@ -99,7 +99,7 @@ sudo apt upgrade
 ### Test apache server
 1. Open in your pc browser:
    
-```html
+```HTML
 # Browser url
 <raspberry Pi IPv4>
 ```
@@ -164,6 +164,108 @@ sudo tcpdump -i eth0 port 80 -w webzugriff.pcap
 # --> Commands in powershell <--
 sudo tcpdump -r webzugriff.pcap
 ```
+
+## Adding User for Raspberry
+As example we add two Users, one with normal rights and one with adm rights.
+### Add first user
+1. Add User
+
+```bash
+sudo adduser <username>
+```
+2. Set password and more information and save it
+```markdown
+- setting password
+- verify password
+- optional: add more information
+- verify your information with 'y'
+```
+3. revoke sudo rights for user
+```bash
+sudo deluser <username> sudo
+```
+### Add second user
+4. Add User
+```markdown
+- Repeat step 1 & 2
+```
+5. Grant Sudorights
+```bash
+sudo usermod -aG sudo <username>
+```
+## Setting up Application with Docker
+1. Install Docker
+```bash
+sudo apt install docker.io
+# If there is a question for more dataspace verify with 'yes'
+```
+2. Start Docker
+```bash
+sudo systemctl start docker.service
+```
+3. Verify installation with test
+```bash
+sudo docker run hello-world
+# use it with ubuntu
+sudo docker run -it ubuntu bash
+# optional:
+# getting list of dockerimages:
+sudo docker images
+```
+4. Create dockerfile
+- Baseimage for container
+- installation of requirements
+- copy of python script in container
+
+```markdown
+# Dockerfile
+
+# Downloading basisimage for python application
+FROM python:3.12-alpine
+
+# Changing workdirectory to Containerdirectory
+WORKDIR /app
+
+# installing requirements
+COPY requirements.txt /app
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy local file into dockerimage
+COPY server.py /app
+
+# Configure the command to be executed in the container
+# (Application Python + Scriptname as Parameter)
+ENTRYPOINT [ "python" ]
+CMD ["server.py"]
+```
+5. Build docker container
+```bash
+git clone <link to repository>
+# change directory
+cd <path of repository>
+# build container with specific name
+Sudo docker build -t <specific name>
+```
+6. Start container
+```bash
+sudo docker run -p 5000:5000 -d <specific name>
+```
+7. verify running container
+```bash
+sudo docker ps
+```
+Here should be your <specific name> in the list
+8. Test in browser
+```markdown
+<raspbarry pi ip adress>:<port>/<apiendpoint>
+
+:5000 is the port where it is running
+/<endpoint of api>
+```
+```html
+192.168.24.102:5000/todo-lists
+```
+
 ## Have fun with it 😊
 	    
 # LICENCE

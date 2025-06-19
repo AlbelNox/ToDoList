@@ -1,6 +1,7 @@
 # Project
 This project sets up a **headless Raspberry Pi webserver**, mainly to host an `<index.html>` file that interacts with another project.  
 It uses Apache2 as a basic web server and provides step-by-step setup instructions from flashing the SD card to network monitoring with `tcpdump`.
+New users will be added with `access control` and the webapp will be deployed with a `docker` container. In the end you can access the `todo-List` via `api` in the `browser`. 
 
 # Librarys
 - apache2
@@ -16,6 +17,11 @@ It uses Apache2 as a basic web server and provides step-by-step setup instructio
 - SSH access and configuration
 - Index page customization via Bash
 - Basic TCP traffic monitoring (port 80)
+- Adding user in raspberry pi with diffrent access permissions
+- `Optional`: Setting static ip-adress for raspberry pi
+- Installation for docker
+- How to build a docker-container
+- start your application with the docker container 
   
 # Setup
 ## Setup Guide: Webserver on Raspberry Pi (`Headless, from Windows`)
@@ -37,17 +43,17 @@ It uses Apache2 as a basic web server and provides step-by-step setup instructio
 3. Open Windows PowerShell (`Admin`) on your windows pc:
 ```markdown
 If copy & paste is not enabled in your powershell:
-- rightclick at the topframe
-- click properties
-- activate `USE Ctrl+Shift+C/V as Copy/Paste`
-- click 'OK'
+- Rightclick at the topframe
+- Click properties
+- Activate `USE Ctrl+Shift+C/V as Copy/Paste`
+- Click 'OK'
 Now, you should be able to copy & paste text via rightclicked mouse.
 ```
 
 ```bash
 # --> Commands in powershell <--
-# check if raspberry is found in network, IPv4 as response
-# for easier access make the IPv4 for the raspberry static
+# Check if raspberry is found in network, IPv4 as response
+# For easier access make the IPv4 for the raspberry static
 ping raspberrypi -4
 
 # Enable SSH connection with raspberry pi
@@ -58,41 +64,73 @@ ssh <Pi_Hostname>@<raspberry Pi IPv4>
 
 ```bash
 # --> Commands in powershell <--
-# reset SSH key
+# Reset SSH key
 ssh-keygen -R <raspberry Pi IPv4>
 
-# retry to connect via SSH
+# Retry to connect via SSH
 ssh <Pi_Hostname>@<raspberry Pi IPv4>
 ```
 ### 🟢 Else
 
 4. Authenticate:
 - `yes` for authentitytest
-- enter `Pi_password`
+- Enter `Pi_password`
 
-Optional: Run configuration tool (`not needed!`)
+`Optional`: Run configuration tool (`not needed!`)
 ```bash
 # --> Commands in powershell <--
 # Access to config of raspberry pi 
 sudo raspi-config
 ```
+`Optional`: Setting static ip-adress for raspberry pi (`not needed!`)
+```bash
+# Install NetworkManager (if not already present)
+sudo apt install network-manager -y
+
+# Disable the old system (dhcpcd) so they don’t conflict
+sudo systemctl disable dhcpcd
+sudo systemctl stop dhcpcd
+
+# Now enable & start NetworkManager
+sudo systemctl enable NetworkManager
+sudo systemctl start NetworkManager
+
+# Verify that the NetworkManager is running
+nmcli general status
+
+# List your connections for a better overview 
+nmcli connection show
+
+# Set static ip-adress for raspberry pi
+nmcli connection modify "<your connection>" \
+ipv4.addresses <future raspberry pi ip-adress>/<subnetmask> \
+ipv4.gateway <gateway ip-adress> \
+ipv4.dns "<gateway ip-adress> 8.8.8.8" \
+ipv4.method manual
+
+# Apply changes
+nmcli connection down "<your connection>"
+nmcli connection up "<your connection>"
+# Or
+sudo reboot
+```
 
 ### Installing apache webserver
 ```bash
 # --> Commands in powershell <--
-# check updates for your application
+# Check updates for your application
 sudo apt update
 
-# install apache2
+# Install apache2
 sudo apt install apache2 -y
-# check if installed correctly and available (active (running))
+# Check if installed correctly and available (active (running))
 sudo systemctl status apache2
 ```
 
-Optional:
+`Optional`:
 ```bash
 # --> Commands in powershell <--
-# upgrading currently installed applications to their latest available version
+# Upgrading currently installed applications to their latest available version
 sudo apt upgrade
 ```
 
@@ -109,6 +147,7 @@ you should see `Apache2 Debian Default Page`
 ```bash
 # --> Commands in powershell <--
 # HTML with little Design
+# EOF makes sure, that there will be no output in the console
 sudo tee /var/www/html/index.html > /dev/null <<EOF
 <!DOCTYPE html>
 <html lang="en">
@@ -142,31 +181,31 @@ EOF
 3. Reload browser - it should show your message.
 
 ### Monitor web traffic
-1. installing & recording
+1. Installing & recording
 ```bash
 # --> Commands in powershell <--
-# install tcpdump
+# Install tcpdump
 sudo apt install tcpdump -y
 
-# start recording port80 (HTTP) traffic save in file named "webzugriff.pcap"
-# you can change the name, but change it in the following Commands too!
+# Start recording port80 (HTTP) traffic save in file named "webzugriff.pcap"
+# You can change the name, but change it in the following Commands too!
 sudo tcpdump -i eth0 port 80 -w webzugriff.pcap
 ```
-2. interact with the server (`reload browserpage`)
+2. Interact with the server (`reload browserpage`)
 
-3. stop recording in powershell via
+3. Stop recording in powershell via
 >--> Commands in powershell <--
 >
 > CTRL + C
 
-4. review the data
+4. Review the data
 ```bash
 # --> Commands in powershell <--
 sudo tcpdump -r webzugriff.pcap
 ```
 
 ## Adding User for Raspberry
-As example we add two Users, one with normal rights and one with adm rights.
+As example we add two Users, one with normal permissions and one with adm permissions.
 ### Add first user
 1. Add User
 
@@ -175,21 +214,24 @@ sudo adduser <username>
 ```
 2. Set password and more information and save it
 ```markdown
-- setting password
-- verify password
-- optional: add more information
-- verify your information with 'y'
+- Setting password
+- Verify password
+- Optional: add more information
+- Verify your information with 'y'
 ```
-3. revoke sudo rights for user
+3. Revoke sudo access permissions for user
 ```bash
 sudo deluser <username> sudo
 ```
+Make sure to remember `<username>` & `<password>` for the user.
 ### Add second user
 4. Add User
 ```markdown
 - Repeat step 1 & 2
 ```
-5. Grant Sudorights
+Make sure to remember `<username>` & `<password>` for the user.
+
+5. Grant Sudo permission
 ```bash
 sudo usermod -aG sudo <username>
 ```
@@ -206,16 +248,16 @@ sudo systemctl start docker.service
 3. Verify installation with test
 ```bash
 sudo docker run hello-world
-# use it with ubuntu
+# Use it with ubuntu
 sudo docker run -it ubuntu bash
-# optional:
-# getting list of dockerimages:
+# Optional:
+# Getting list of dockerimages:
 sudo docker images
 ```
 4. Create dockerfile
 - Baseimage for container
-- installation of requirements
-- copy of python script in container
+- Installation of requirements
+- Copy of python script in container
 
 ```markdown
 # Dockerfile
@@ -226,7 +268,7 @@ FROM python:3.12-alpine
 # Changing workdirectory to Containerdirectory
 WORKDIR /app
 
-# installing requirements
+# Installing requirements
 COPY requirements.txt /app
 RUN pip install --no-cache-dir -r requirements.txt
 
@@ -241,26 +283,26 @@ CMD ["server.py"]
 5. Build docker container
 ```bash
 git clone <link to repository>
-# change directory
+# Change directory
 cd <path of repository>
-# build container with specific name
+# Build container with specific name
 Sudo docker build -t <specific name>
 ```
 6. Start container
 ```bash
 sudo docker run -p 5000:5000 -d <specific name>
 ```
-7. verify running container
+7. Verify running container
 ```bash
 sudo docker ps
 ```
-Here should be your <specific name> in the list
+In the list should be your <specific name>.
 8. Test in browser
 ```markdown
-<raspbarry pi ip adress>:<port>/<apiendpoint>
+# <raspbarry pi ip adress>:<port>/<api endpoint>
 
-:5000 is the port where it is running
-/<endpoint of api>
+# :5000 is the port where it is running
+# /<endpoint of api>
 ```
 ```html
 192.168.24.102:5000/todo-lists

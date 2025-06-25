@@ -330,6 +330,23 @@ The response should look like this:
 ]
 ```
 
+9. Update dockercontainer to automatic start when raspberry is connected
+```bash
+# Getting the name of your container
+sudo docker ps -a
+```
+The list should look like this:
+```hmtl
+CONTAINER ID   IMAGE             COMMAND              CREATED          STATUS         PORTS                                       NAMES
+803c75116c67   todo-listen-app   "python server.py"   15 minutes ago   Up 4 minutes   0.0.0.0:5000->5000/tcp, :::5000->5000/tcp   pensive_noyce
+```
+
+```
+# Update the container for full autorestart
+sudo docker update --restart unless-stopped <ContainerName>
+```
+Now your container will start when the raspberry is connected.
+
 ## Have fun with it 😊
 	    
 # LICENCE
